@@ -1,5 +1,6 @@
 import AppError from '@shared/erros/AppErros';
 import { injectable, inject } from 'tsyringe';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import User from '../infra/typeorm/entities/User';
 import IUserRepository from '../repositories/IUserRepository';
 import IHashProvider from '../providers/hashProvider/models/IHashProvider';
@@ -17,6 +18,9 @@ class CreateUserService {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) { }
 
   public async exec({ name, email, password }: IRequestDto): Promise<User> {
@@ -33,6 +37,8 @@ class CreateUserService {
       email,
       password: hashedPassword,
     });
+
+    await this.cacheProvider.invalidadePrefix('provider-list');
 
     return user;
   }

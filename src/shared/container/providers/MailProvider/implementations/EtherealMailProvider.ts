@@ -9,7 +9,7 @@ export default class EtherealMaiProvider implements IMailProvider {
   private client: Transporter;
 
   constructor(
-    @inject('HandlebarsMailTemplateProvider')
+    @inject('MailTelmplateProvier')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
     nodemailer.createTestAccount().then(account => {
